@@ -1,0 +1,25 @@
+{
+  "name": "eduportal-student-academic-hub",
+  "version": "2.0.0",
+  "description": "Smart Student Academic Management Portal with Vector Character Animations and SIS Telemetry Engine",
+  "main": "index.html",
+  "scripts": {
+    "start": "python run.py",
+    "dev": "python run.py",
+    "open": "start index.html",
+    "serve": "npx serve -l 3000 ."
+  },
+  "keywords": [
+    "academic-portal",
+    "student-management",
+    "sis-telemetry",
+    "attendance-gauge",
+    "cgpa-calculator",
+    "hall-ticket-pdf",
+    "animation",
+    "svg",
+    "physics"
+  ],
+  "author": "EduPortal Team",
+  "license": "MIT"
+}

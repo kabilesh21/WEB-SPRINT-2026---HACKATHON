@@ -1,0 +1,1348 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kayak Studio — 38-Second 2D Animated UI Video (4:3)</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Outfit:wght@500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-dark: #1e2226;
+      --bg-card: #ffffff;
+      --bg-characters: #dedfe4;
+      --color-pink: #ffafc6;
+      --color-red: #f04d6d;
+      --color-teal: #66d6d4;
+      --color-blue: #2d87f9;
+      --text-main: #111317;
+      --text-muted: #6b7280;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background: #111316;
+      color: #ffffff;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+      overflow-x: hidden;
+    }
+
+    /* Video Studio Container */
+    .video-studio-wrapper {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 14px;
+      width: 100%;
+      max-width: 1040px;
+    }
+
+    /* Top Studio Bar */
+    .studio-bar {
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 8px 12px;
+      background: #1a1e23;
+      border: 1px solid #2a2f36;
+      border-radius: 12px;
+    }
+
+    .studio-title {
+      font-size: 0.95rem;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .badge-ratio {
+      background: #2563eb;
+      color: #ffffff;
+      padding: 2px 8px;
+      border-radius: 6px;
+      font-size: 0.75rem;
+      font-weight: 800;
+    }
+
+    .badge-fps {
+      background: #334155;
+      color: #94a3b8;
+      padding: 2px 8px;
+      border-radius: 6px;
+      font-size: 0.75rem;
+    }
+
+    .studio-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .btn-studio {
+      background: #262b32;
+      color: #e2e8f0;
+      border: 1px solid #3b424d;
+      padding: 6px 14px;
+      border-radius: 8px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s ease;
+      text-decoration: none;
+    }
+
+    .btn-studio:hover {
+      background: #333a44;
+      color: #ffffff;
+    }
+
+    .btn-studio.record {
+      background: #ef4444;
+      color: #ffffff;
+      border-color: #dc2626;
+    }
+
+    .btn-studio.record:hover {
+      background: #dc2626;
+    }
+
+    /* 4:3 Aspect Ratio Screen Viewport */
+    .viewport-4-3-wrapper {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 4 / 3;
+      max-height: 760px;
+      background: #3f4449;
+      border-radius: 18px;
+      overflow: hidden;
+      box-shadow: 0 30px 70px rgba(0,0,0,0.6), 0 0 0 1px rgba(255,255,255,0.08);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* Video Frame Stage (Exact 1200x900 coordinate system) */
+    .video-stage {
+      position: absolute;
+      width: 1200px;
+      height: 900px;
+      transform-origin: center center;
+      background: radial-gradient(circle at center 45%, #50565d 0%, #35393d 100%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      user-select: none;
+    }
+
+    /* Stage Header */
+    .stage-header {
+      position: absolute;
+      top: 36px;
+      width: 980px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      opacity: 0;
+      transform: translateY(-20px);
+      transition: opacity 0.8s ease, transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .stage-header.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .stage-brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .stage-avatar {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: #111417;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .stage-brand-text h4 {
+      font-size: 1rem;
+      font-weight: 700;
+      color: #ffffff;
+    }
+
+    .stage-brand-text p {
+      font-size: 0.78rem;
+      color: #94a3b8;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .stage-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: #22c55e;
+    }
+
+    .stage-nav-actions {
+      display: flex;
+      gap: 10px;
+    }
+
+    .stage-pill {
+      background: #ffffff;
+      color: #111827;
+      padding: 6px 14px;
+      border-radius: 20px;
+      font-size: 0.82rem;
+      font-weight: 700;
+    }
+
+    .stage-pill.dark {
+      background: #111317;
+      color: #ffffff;
+    }
+
+    /* Central UI Card */
+    .stage-card {
+      width: 980px;
+      height: 580px;
+      background: #ffffff;
+      border-radius: 32px;
+      box-shadow: 0 30px 60px rgba(0,0,0,0.35);
+      display: grid;
+      grid-template-columns: 1.15fr 0.95fr;
+      overflow: hidden;
+      position: relative;
+      opacity: 0;
+      transform: scale(0.85) translateY(30px);
+      transition: opacity 1.2s cubic-bezier(0.16, 1, 0.3, 1), transform 1.2s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .stage-card.revealed {
+      opacity: 1;
+      transform: scale(1) translateY(0);
+    }
+
+    /* Left Pane: Characters */
+    .stage-characters-pane {
+      background: #dedfe4;
+      background-image: radial-gradient(circle at 50% 60%, #eef0f4 0%, #d8dae0 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    #stage-svg {
+      width: 100%;
+      height: 100%;
+      overflow: visible;
+    }
+
+    /* Right Pane: Login Form */
+    .stage-form-pane {
+      background: #ffffff;
+      padding: 40px 48px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      position: relative;
+    }
+
+    .form-top-badge {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 12px;
+    }
+
+    .form-heading-group {
+      text-align: center;
+      margin-bottom: 22px;
+    }
+
+    .form-heading-group h1 {
+      font-family: 'Outfit', sans-serif;
+      font-size: 1.9rem;
+      font-weight: 700;
+      color: #11141a;
+      letter-spacing: -0.02em;
+      margin-bottom: 4px;
+    }
+
+    .form-heading-group p {
+      font-size: 0.92rem;
+      color: var(--text-muted);
+    }
+
+    .form-fields {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .field-row {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .field-row label {
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: #1f2937;
+    }
+
+    .field-input-box {
+      border-bottom: 1.5px solid #d1d5db;
+      padding: 6px 0;
+      position: relative;
+      display: flex;
+      align-items: center;
+      height: 38px;
+      transition: border-color 0.2s ease;
+    }
+
+    .field-input-box.focused {
+      border-bottom-color: #111317;
+      box-shadow: 0 1px 0 0 #111317;
+    }
+
+    .input-text-render {
+      font-size: 0.95rem;
+      font-weight: 500;
+      color: #111827;
+      min-width: 2px;
+      letter-spacing: 0.02em;
+    }
+
+    .input-caret {
+      width: 2px;
+      height: 18px;
+      background: #111317;
+      display: inline-block;
+      margin-left: 2px;
+      opacity: 0;
+    }
+
+    .input-caret.blinking {
+      animation: caretBlink 0.8s infinite;
+    }
+
+    @keyframes caretBlink {
+      0%, 49% { opacity: 1; }
+      50%, 100% { opacity: 0; }
+    }
+
+    .icon-pwd-eye {
+      position: absolute;
+      right: 0;
+      color: #6b7280;
+    }
+
+    .checkbox-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.85rem;
+      margin-top: 4px;
+    }
+
+    .check-label {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: #374151;
+      font-weight: 500;
+    }
+
+    .fake-checkbox {
+      width: 17px;
+      height: 17px;
+      border: 1.8px solid #374151;
+      border-radius: 4px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s ease;
+    }
+
+    .fake-checkbox svg {
+      opacity: 0;
+      transform: scale(0.6);
+      transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    .fake-checkbox.checked {
+      border-color: #111317;
+    }
+
+    .fake-checkbox.checked svg {
+      opacity: 1;
+      transform: scale(1);
+    }
+
+    .link-forgot-pwd {
+      color: #9ca3af;
+      font-weight: 500;
+    }
+
+    .btn-login-main {
+      background: #111317;
+      color: #ffffff;
+      border: none;
+      padding: 13px;
+      border-radius: 12px;
+      font-size: 0.95rem;
+      font-weight: 700;
+      text-align: center;
+      margin-top: 4px;
+      box-shadow: 0 4px 14px rgba(0,0,0,0.15);
+      transition: transform 0.25s ease, box-shadow 0.25s ease, background 0.25s ease;
+    }
+
+    .btn-login-main.hovered {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+      background: #22262d;
+    }
+
+    .btn-google-main {
+      background: #f3f4f6;
+      color: #1f2937;
+      border: 1px solid #e5e7eb;
+      padding: 11px;
+      border-radius: 12px;
+      font-size: 0.92rem;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+    }
+
+    .bottom-signup-text {
+      text-align: center;
+      font-size: 0.85rem;
+      color: #6b7280;
+      margin-top: 14px;
+    }
+
+    .bottom-signup-text strong {
+      color: #111827;
+      text-decoration: underline;
+    }
+
+    /* Virtual Cursor */
+    .virtual-cursor {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 32px;
+      height: 32px;
+      z-index: 1000;
+      pointer-events: none;
+      opacity: 0;
+      transform: translate(1100px, 800px);
+      transition: opacity 0.5s ease;
+      filter: drop-shadow(0 4px 8px rgba(0,0,0,0.35));
+    }
+
+    .virtual-cursor svg {
+      width: 28px;
+      height: 28px;
+    }
+
+    .cursor-ripple {
+      position: absolute;
+      top: -10px;
+      left: -10px;
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: rgba(37, 99, 235, 0.4);
+      opacity: 0;
+      transform: scale(0.2);
+    }
+
+    .cursor-ripple.active {
+      animation: rippleAnim 0.5s ease-out;
+    }
+
+    @keyframes rippleAnim {
+      0% { opacity: 0.8; transform: scale(0.2); }
+      100% { opacity: 0; transform: scale(1.8); }
+    }
+
+    /* Bottom Video Timeline & Playback Controller */
+    .timeline-controller {
+      width: 100%;
+      background: #1a1e23;
+      border: 1px solid #2a2f36;
+      border-radius: 12px;
+      padding: 12px 18px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .timeline-scrubber-row {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .timeline-track {
+      flex: 1;
+      height: 8px;
+      background: #2c323b;
+      border-radius: 4px;
+      position: relative;
+      cursor: pointer;
+      overflow: hidden;
+    }
+
+    .timeline-progress {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, #2563eb, #38bdf8);
+      border-radius: 4px;
+      transition: width 0.05s linear;
+    }
+
+    .time-display {
+      font-family: monospace;
+      font-size: 0.9rem;
+      font-weight: 700;
+      color: #94a3b8;
+      min-width: 90px;
+      text-align: right;
+    }
+
+    .controls-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .btn-playback {
+      background: #2563eb;
+      color: #ffffff;
+      border: none;
+      padding: 8px 18px;
+      border-radius: 8px;
+      font-size: 0.88rem;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: background 0.2s ease;
+    }
+
+    .btn-playback:hover {
+      background: #1d4ed8;
+    }
+
+    .phase-indicator {
+      font-size: 0.82rem;
+      color: #cbd5e1;
+      background: #242a33;
+      padding: 4px 12px;
+      border-radius: 6px;
+      border-left: 3px solid #38bdf8;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="video-studio-wrapper">
+    
+    <!-- Top Bar -->
+    <div class="studio-bar">
+      <div class="studio-title">
+        <span>🎬 2D Animated UI Video</span>
+        <span class="badge-ratio">4:3 Aspect Ratio</span>
+        <span class="badge-fps">30 FPS Smooth Easing</span>
+      </div>
+      <div class="studio-actions">
+        <a href="index.html" class="btn-studio">← Back to Interactive App</a>
+        <button class="btn-studio record" id="btn-export-video">🎥 Export WebM Video</button>
+      </div>
+    </div>
+
+    <!-- 4:3 Aspect Ratio Video Player Frame -->
+    <div class="viewport-4-3-wrapper" id="viewport-frame">
+      <div class="video-stage" id="video-stage">
+        
+        <!-- Top Nav Branding -->
+        <div class="stage-header" id="stage-header">
+          <div class="stage-brand">
+            <div class="stage-avatar">
+              <svg viewBox="0 0 40 40" width="28" height="28" fill="none">
+                <path d="M12 14L19 23V28H21V23L28 14H25.2L20 20.8L14.8 14H12Z" fill="#2dd4bf"/>
+                <circle cx="28" cy="14" r="2" fill="#38bdf8"/>
+              </svg>
+            </div>
+            <div class="stage-brand-text">
+              <h4>Kayak Studio</h4>
+              <p><span class="stage-dot"></span> Available for work</p>
+            </div>
+          </div>
+          <div class="stage-nav-actions">
+            <span class="stage-pill">Follow</span>
+            <span class="stage-pill dark">Get in touch</span>
+          </div>
+        </div>
+
+        <!-- Center Login Card -->
+        <div class="stage-card" id="stage-card">
+          
+          <!-- Left Pane: 4 Cartoon Monsters -->
+          <div class="stage-characters-pane">
+            <svg id="stage-svg" viewBox="0 0 600 680" preserveAspectRatio="xMidYMid meet">
+              <defs>
+                <clipPath id="vid-pink-clip"><circle cx="0" cy="0" r="32"/></clipPath>
+                <clipPath id="vid-red-left-clip"><circle cx="0" cy="0" r="17"/></clipPath>
+                <clipPath id="vid-red-right-clip"><circle cx="0" cy="0" r="17"/></clipPath>
+                <clipPath id="vid-teal-left-clip"><circle cx="0" cy="0" r="16"/></clipPath>
+                <clipPath id="vid-teal-right-clip"><circle cx="0" cy="0" r="16"/></clipPath>
+                <clipPath id="vid-blue-left-clip"><circle cx="0" cy="0" r="19"/></clipPath>
+                <clipPath id="vid-blue-right-clip"><circle cx="0" cy="0" r="19"/></clipPath>
+              </defs>
+
+              <ellipse cx="300" cy="650" rx="260" ry="25" fill="#cfd2d8" opacity="0.6"/>
+
+              <!-- 1. PINK MONSTER -->
+              <g id="v-pink-monster" transform="translate(0, 80)" opacity="0">
+                <g id="v-pink-body-root">
+                  <path d="M 230 640 L 230 320 C 230 200, 470 200, 470 320 L 470 640 Z" fill="#ffafc6"/>
+                  
+                  <g id="v-pink-hand" opacity="0" transform="translate(320, 360)">
+                    <path d="M -35 80 C -30 20, 10 -20, 45 -10 C 65 -5, 60 40, 45 70 C 30 100, -10 120, -35 80 Z" fill="#f89cb8"/>
+                    <circle cx="40" cy="0" r="10" fill="#f89cb8"/>
+                    <circle cx="20" cy="-10" r="10" fill="#f89cb8"/>
+                  </g>
+
+                  <g id="v-pink-eye-group" transform="translate(330, 270)">
+                    <circle cx="0" cy="0" r="32" fill="#ffffff" stroke="#f698b3" stroke-width="2"/>
+                    <g clip-path="url(#vid-pink-clip)">
+                      <g id="v-pink-pupil">
+                        <circle cx="0" cy="0" r="19" fill="#181a1f"/>
+                        <circle cx="-6" cy="-6" r="6" fill="#ffffff"/>
+                        <circle cx="7" cy="6" r="2.5" fill="#ffffff"/>
+                      </g>
+                    </g>
+                    <path id="v-pink-closed-eye" d="M -22 0 Q 0 14 22 0" fill="none" stroke="#b45070" stroke-width="4.5" stroke-linecap="round" opacity="0"/>
+                  </g>
+
+                  <g transform="translate(420, 310)">
+                    <ellipse cx="0" cy="0" rx="18" ry="18" fill="#b85c78"/>
+                    <ellipse cx="1" cy="3" rx="13" ry="13" fill="#8e3d55"/>
+                    <path d="M 4 -16 L 14 -16 C 14 -16, 14 -3, 9 -3 C 4 -3, 4 -16, 4 -16 Z" fill="#ffffff"/>
+                  </g>
+                </g>
+              </g>
+
+              <!-- 2. RED MONSTER -->
+              <g id="v-red-monster" transform="translate(-100, 0)" opacity="0">
+                <line x1="205" y1="360" x2="185" y2="640" stroke="#f04d6d" stroke-width="16" stroke-linecap="round"/>
+                <line x1="255" y1="360" x2="255" y2="640" stroke="#f04d6d" stroke-width="16" stroke-linecap="round"/>
+
+                <g id="v-red-head-root" transform="translate(230, 240)">
+                  <path d="M -105 -25 L 35 -25 C 65 -25, 65 35, 35 35 L -105 35 C -135 35, -135 -25, -105 -25 Z" fill="#f04d6d"/>
+                  <ellipse cx="-95" cy="5" rx="14" ry="9" fill="#901a33"/>
+
+                  <g transform="translate(-25, -32)">
+                    <circle cx="0" cy="0" r="18" fill="#ffffff" stroke="#e0375a" stroke-width="1.5"/>
+                    <g clip-path="url(#vid-red-left-clip)">
+                      <g id="v-red-left-pupil">
+                        <circle cx="0" cy="0" r="10" fill="#181a1f"/>
+                        <circle cx="-3" cy="-3" r="3.5" fill="#ffffff"/>
+                      </g>
+                    </g>
+                  </g>
+
+                  <g transform="translate(15, -32)">
+                    <circle cx="0" cy="0" r="18" fill="#ffffff" stroke="#e0375a" stroke-width="1.5"/>
+                    <g clip-path="url(#vid-red-right-clip)">
+                      <g id="v-red-right-pupil">
+                        <circle cx="0" cy="0" r="10" fill="#181a1f"/>
+                        <circle cx="-3" cy="-3" r="3.5" fill="#ffffff"/>
+                      </g>
+                    </g>
+                  </g>
+                </g>
+              </g>
+
+              <!-- 3. TEAL MONSTER -->
+              <g id="v-teal-monster" transform="translate(-60, 40)" opacity="0">
+                <line x1="165" y1="520" x2="135" y2="640" stroke="#5fc9c6" stroke-width="15" stroke-linecap="round"/>
+                <line x1="225" y1="520" x2="245" y2="640" stroke="#5fc9c6" stroke-width="15" stroke-linecap="round"/>
+
+                <g id="v-teal-body-root" transform="translate(195, 435)">
+                  <path d="M 0 -85 C 25 -85, 45 -70, 55 -60 C 75 -65, 95 -45, 90 -20 C 105 -5, 105 25, 90 45 C 95 70, 75 90, 50 90 C 30 100, -5 105, -30 95 C -55 100, -85 80, -85 55 C -105 35, -105 -5, -90 -25 C -95 -55, -70 -80, -45 -80 C -30 -90, -15 -90, 0 -85 Z" fill="#66d6d4"/>
+
+                  <g transform="translate(-25, -20)">
+                    <circle cx="0" cy="0" r="16" fill="#ffffff" stroke="#4dbab8" stroke-width="1.5"/>
+                    <g clip-path="url(#vid-teal-left-clip)">
+                      <g id="v-teal-left-pupil">
+                        <circle cx="0" cy="0" r="9" fill="#181a1f"/>
+                        <circle cx="-3" cy="-3" r="3" fill="#ffffff"/>
+                      </g>
+                    </g>
+                    <path id="v-teal-left-wink" d="M -12 0 L 0 6 L 12 0" fill="none" stroke="#256b69" stroke-width="3" stroke-linecap="round" opacity="0"/>
+                  </g>
+
+                  <g transform="translate(25, -20)">
+                    <circle cx="0" cy="0" r="16" fill="#ffffff" stroke="#4dbab8" stroke-width="1.5"/>
+                    <g clip-path="url(#vid-teal-right-clip)">
+                      <g id="v-teal-right-pupil">
+                        <circle cx="0" cy="0" r="9" fill="#181a1f"/>
+                        <circle cx="-3" cy="-3" r="3" fill="#ffffff"/>
+                      </g>
+                    </g>
+                    <path id="v-teal-right-wink" d="M -12 0 L 0 6 L 12 0" fill="none" stroke="#256b69" stroke-width="3" stroke-linecap="round" opacity="0"/>
+                  </g>
+
+                  <g transform="translate(0, 22)">
+                    <ellipse cx="0" cy="0" rx="8" ry="16" fill="#195453"/>
+                  </g>
+
+                  <ellipse id="v-teal-blush-left" cx="-50" cy="5" rx="12" ry="6" fill="#ff7f9d" opacity="0"/>
+                  <ellipse id="v-teal-blush-right" cx="50" cy="5" rx="12" ry="6" fill="#ff7f9d" opacity="0"/>
+                </g>
+              </g>
+
+              <!-- 4. BLUE MONSTER -->
+              <g id="v-blue-monster" transform="translate(0, 60)" opacity="0">
+                <line x1="330" y1="550" x2="310" y2="640" stroke="#2780ee" stroke-width="16" stroke-linecap="round"/>
+                <line x1="390" y1="550" x2="405" y2="640" stroke="#2780ee" stroke-width="16" stroke-linecap="round"/>
+
+                <g id="v-blue-body-root" transform="translate(365, 465)">
+                  <circle cx="0" cy="0" r="95" fill="#2d87f9"/>
+                  
+                  <g transform="translate(-32, -30)">
+                    <circle cx="0" cy="0" r="20" fill="#ffffff" stroke="#1a6ad4" stroke-width="1.5"/>
+                    <g clip-path="url(#vid-blue-left-clip)">
+                      <g id="v-blue-left-pupil">
+                        <circle cx="0" cy="0" r="11" fill="#181a1f"/>
+                        <circle cx="-4" cy="-4" r="3.5" fill="#ffffff"/>
+                      </g>
+                    </g>
+                    <path id="v-blue-left-closed" d="M -16 0 Q 0 10 16 0" fill="none" stroke="#114587" stroke-width="3.5" stroke-linecap="round" opacity="0"/>
+                  </g>
+
+                  <g transform="translate(26, -26)">
+                    <circle cx="0" cy="0" r="20" fill="#ffffff" stroke="#1a6ad4" stroke-width="1.5"/>
+                    <g clip-path="url(#vid-blue-right-clip)">
+                      <g id="v-blue-right-pupil">
+                        <circle cx="0" cy="0" r="11" fill="#181a1f"/>
+                        <circle cx="-4" cy="-4" r="3.5" fill="#ffffff"/>
+                      </g>
+                    </g>
+                    <path id="v-blue-right-closed" d="M -16 0 Q 0 10 16 0" fill="none" stroke="#114587" stroke-width="3.5" stroke-linecap="round" opacity="0"/>
+                  </g>
+
+                  <g transform="translate(30, 20)">
+                    <ellipse cx="0" cy="0" rx="14" ry="14" fill="#0d3f82"/>
+                    <path d="M -5 -14 L 3 -14 C 3 -14, 3 -4, -1 -4 C -5 -4, -5 -14, -5 -14 Z" fill="#ffffff"/>
+                  </g>
+
+                  <g id="v-blue-hands" opacity="0" transform="translate(0, 0)">
+                    <ellipse cx="-45" cy="-20" rx="20" ry="14" fill="#2272d4" transform="rotate(-15)"/>
+                    <ellipse cx="20" cy="-18" rx="20" ry="14" fill="#2272d4" transform="rotate(15)"/>
+                  </g>
+                </g>
+              </g>
+
+            </svg>
+          </div>
+
+          <!-- Right Pane: Form -->
+          <div class="stage-form-pane">
+            <div class="form-top-badge">
+              <svg width="38" height="26" viewBox="0 0 42 30" fill="none">
+                <path d="M4 8C4 4.5 7 2 10.5 4L21 11L31.5 4C35 2 38 4.5 38 8V20C38 24.5 34.5 28 30 28H12C7.5 28 4 24.5 4 20V8Z" fill="#111317"/>
+                <ellipse cx="14" cy="18" rx="2.5" ry="3.5" fill="#ffffff"/>
+                <ellipse cx="28" cy="18" rx="2.5" ry="3.5" fill="#ffffff"/>
+              </svg>
+            </div>
+
+            <div class="form-heading-group">
+              <h1>Welcome back!</h1>
+              <p>Please enter your details</p>
+            </div>
+
+            <div class="form-fields">
+              <div class="field-row">
+                <label>Email</label>
+                <div class="field-input-box" id="v-box-email">
+                  <span class="input-text-render" id="v-txt-email"></span>
+                  <span class="input-caret" id="v-caret-email"></span>
+                </div>
+              </div>
+
+              <div class="field-row">
+                <label>Password</label>
+                <div class="field-input-box" id="v-box-pwd">
+                  <span class="input-text-render" id="v-txt-pwd"></span>
+                  <span class="input-caret" id="v-caret-pwd"></span>
+                  <svg class="icon-pwd-eye" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path>
+                    <line x1="1" y1="1" x2="23" y2="23"></line>
+                  </svg>
+                </div>
+              </div>
+
+              <div class="checkbox-row">
+                <div class="check-label" id="v-check-row">
+                  <div class="fake-checkbox" id="v-checkbox">
+                    <svg width="11" height="9" viewBox="0 0 12 10" fill="none">
+                      <path d="M1.5 5L4.5 8L10.5 2" stroke="#111317" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                  </div>
+                  <span>Remember me</span>
+                </div>
+                <span class="link-forgot-pwd">Forgot password?</span>
+              </div>
+
+              <div class="btn-login-main" id="v-btn-login">Log in</div>
+
+              <div class="btn-google-main">
+                <svg width="18" height="18" viewBox="0 0 24 24">
+                  <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+                  <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+                  <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"/>
+                  <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"/>
+                </svg>
+                <span>Log in with Google</span>
+              </div>
+            </div>
+
+            <div class="bottom-signup-text">
+              Don't have an account? <strong>Sign Up</strong>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Virtual Cursor -->
+        <div class="virtual-cursor" id="v-cursor">
+          <div class="cursor-ripple" id="v-ripple"></div>
+          <svg viewBox="0 0 24 24" fill="none">
+            <path d="M4 3L18 12L11 14L8 21L4 3Z" fill="#111827" stroke="#ffffff" stroke-width="1.8" stroke-linejoin="round"/>
+          </svg>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Timeline & Playback Controller -->
+    <div class="timeline-controller">
+      <div class="timeline-scrubber-row">
+        <div class="timeline-track" id="timeline-track">
+          <div class="timeline-progress" id="timeline-progress"></div>
+        </div>
+        <div class="time-display" id="time-display">00:00 / 00:38</div>
+      </div>
+
+      <div class="controls-row">
+        <button class="btn-playback" id="btn-play-pause">
+          <span id="play-icon">▶</span>
+          <span id="play-text">Play Video</span>
+        </button>
+        <div class="phase-indicator" id="phase-indicator">Phase: Ready to play</div>
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+    /**
+     * 38-SECOND ANIMATION SCRIPT TIMELINE CONTROLLER
+     */
+    const DURATION = 38.0; // Exact 38 seconds
+    let currentTime = 0;
+    let isPlaying = false;
+    let animationFrameId = null;
+    let lastTimestamp = null;
+
+    // Elements
+    const stageCard = document.getElementById('stage-card');
+    const stageHeader = document.getElementById('stage-header');
+    const vPink = document.getElementById('v-pink-monster');
+    const vRed = document.getElementById('v-red-monster');
+    const vTeal = document.getElementById('v-teal-monster');
+    const vBlue = document.getElementById('v-blue-monster');
+
+    const vCursor = document.getElementById('v-cursor');
+    const vRipple = document.getElementById('v-ripple');
+    const vTxtEmail = document.getElementById('v-txt-email');
+    const vCaretEmail = document.getElementById('v-caret-email');
+    const vBoxEmail = document.getElementById('v-box-email');
+    const vTxtPwd = document.getElementById('v-txt-pwd');
+    const vCaretPwd = document.getElementById('v-caret-pwd');
+    const vBoxPwd = document.getElementById('v-box-pwd');
+    const vCheckbox = document.getElementById('v-checkbox');
+    const vBtnLogin = document.getElementById('v-btn-login');
+
+    // Monster Rig Elements
+    const pinkPupil = document.getElementById('v-pink-pupil');
+    const pinkHand = document.getElementById('v-pink-hand');
+    const pinkClosed = document.getElementById('v-pink-closed-eye');
+    const redHead = document.getElementById('v-red-head-root');
+    const redLeftPupil = document.getElementById('v-red-left-pupil');
+    const redRightPupil = document.getElementById('v-red-right-pupil');
+    const tealBody = document.getElementById('v-teal-body-root');
+    const tealLeftPupil = document.getElementById('v-teal-left-pupil');
+    const tealRightPupil = document.getElementById('v-teal-right-pupil');
+    const tealLeftWink = document.getElementById('v-teal-left-wink');
+    const tealRightWink = document.getElementById('v-teal-right-wink');
+    const tealBlushL = document.getElementById('v-teal-blush-left');
+    const tealBlushR = document.getElementById('v-teal-blush-right');
+    const blueBody = document.getElementById('v-blue-body-root');
+    const blueHands = document.getElementById('v-blue-hands');
+    const blueLeftPupil = document.getElementById('v-blue-left-pupil');
+    const blueRightPupil = document.getElementById('v-blue-right-pupil');
+    const blueLeftClosed = document.getElementById('v-blue-left-closed');
+    const blueRightClosed = document.getElementById('v-blue-right-closed');
+
+    // UI Controls
+    const timelineProgress = document.getElementById('timeline-progress');
+    const timeDisplay = document.getElementById('time-display');
+    const btnPlayPause = document.getElementById('btn-play-pause');
+    const playIcon = document.getElementById('play-icon');
+    const playText = document.getElementById('play-text');
+    const phaseIndicator = document.getElementById('phase-indicator');
+    const timelineTrack = document.getElementById('timeline-track');
+    const btnExport = document.getElementById('btn-export-video');
+
+    // Auto-fit stage scale to 4:3 frame
+    function resizeStage() {
+      const frame = document.getElementById('viewport-frame');
+      const stage = document.getElementById('video-stage');
+      if (!frame || !stage) return;
+      const frameW = frame.clientWidth;
+      const frameH = frame.clientHeight;
+      const scale = Math.min(frameW / 1200, frameH / 900);
+      stage.style.transform = `scale(${scale})`;
+    }
+    window.addEventListener('resize', resizeStage);
+    resizeStage();
+
+    // Helper: Linear Interpolation
+    function lerp(a, b, t) {
+      return a + (b - a) * Math.max(0, Math.min(1, t));
+    }
+
+    // Helper: Smooth EaseInOut
+    function easeInOutQuad(t) {
+      return t < 0.5 ? 2 * t * t : -1 + (4 - 2 * t) * t;
+    }
+
+    // Helper: Spring Overshoot
+    function springEase(t) {
+      const c4 = (2 * Math.PI) / 3;
+      return t === 0 ? 0 : t === 1 ? 1 : Math.pow(2, -10 * t) * Math.sin((t * 10 - 0.75) * c4) + 1;
+    }
+
+    /**
+     * UPDATE FRAME STATE AT TIME t (0 <= t <= 38)
+     * Exact choreographed timing phases
+     */
+    function renderAtTime(t) {
+      // ----------------------------------------------------------------------
+      // PHASE 1 (0–3s): Clean background, smooth card fade/scale-in + upward ease
+      // ----------------------------------------------------------------------
+      if (t >= 0.2 && t < 3.0) {
+        const cardProgress = Math.min((t - 0.2) / 2.5, 1);
+        const easeVal = easeInOutQuad(cardProgress);
+        stageCard.style.opacity = easeVal;
+        stageCard.style.transform = `scale(${lerp(0.92, 1, easeVal)}) translateY(${lerp(30, 0, easeVal)}px)`;
+        stageHeader.style.opacity = easeVal;
+        stageHeader.style.transform = `translateY(${lerp(-15, 0, easeVal)}px)`;
+      } else if (t >= 3.0) {
+        stageCard.style.opacity = '1';
+        stageCard.style.transform = 'scale(1) translateY(0)';
+        stageHeader.style.opacity = '1';
+        stageHeader.style.transform = 'translateY(0)';
+      } else {
+        stageCard.style.opacity = '0';
+        stageCard.style.transform = 'scale(0.92) translateY(30px)';
+        stageHeader.style.opacity = '0';
+        stageHeader.style.transform = 'translateY(-15px)';
+      }
+
+      // ----------------------------------------------------------------------
+      // PHASE 2 (3–8s): Reveal cartoon characters from left with upward/inward
+      // slide, gentle bounce, and squash-and-stretch settle
+      // ----------------------------------------------------------------------
+      // Pink Monster (3.0s - 4.8s)
+      if (t >= 3.0 && t < 4.8) {
+        const pProgress = Math.min((t - 3.0) / 1.5, 1);
+        vPink.style.opacity = pProgress;
+        vPink.style.transform = `translate(0px, ${lerp(90, 0, springEase(pProgress))}px)`;
+      } else if (t < 3.0) {
+        vPink.style.opacity = '0';
+        vPink.style.transform = 'translate(0px, 90px)';
+      }
+
+      // Red Monster (3.8s - 5.8s)
+      if (t >= 3.8 && t < 5.8) {
+        const rProgress = Math.min((t - 3.8) / 1.6, 1);
+        vRed.style.opacity = rProgress;
+        vRed.style.transform = `translate(${lerp(-120, 0, springEase(rProgress))}px, ${lerp(30, 0, springEase(rProgress))}px)`;
+      } else if (t < 3.8) {
+        vRed.style.opacity = '0';
+        vRed.style.transform = 'translate(-120px, 30px)';
+      }
+
+      // Teal Monster (4.6s - 6.8s)
+      if (t >= 4.6 && t < 6.8) {
+        const teProgress = Math.min((t - 4.6) / 1.6, 1);
+        vTeal.style.opacity = teProgress;
+        vTeal.style.transform = `translate(${lerp(-80, 0, springEase(teProgress))}px, ${lerp(50, 0, springEase(teProgress))}px)`;
+      } else if (t < 4.6) {
+        vTeal.style.opacity = '0';
+        vTeal.style.transform = 'translate(-80px, 50px)';
+      }
+
+      // Blue Monster (5.5s - 7.8s)
+      if (t >= 5.5 && t < 7.8) {
+        const bProgress = Math.min((t - 5.5) / 1.7, 1);
+        vBlue.style.opacity = bProgress;
+        vBlue.style.transform = `translate(${lerp(30, 0, springEase(bProgress))}px, ${lerp(80, 0, springEase(bProgress))}px)`;
+      } else if (t < 5.5) {
+        vBlue.style.opacity = '0';
+        vBlue.style.transform = 'translate(30px, 80px)';
+      }
+
+      // ----------------------------------------------------------------------
+      // CONTINUOUS SECONDARY MOTION & SQUASH-STRETCH (t >= 7.8s)
+      // ----------------------------------------------------------------------
+      if (t >= 7.5) {
+        vPink.style.opacity = '1';
+        vRed.style.opacity = '1';
+        vTeal.style.opacity = '1';
+        vBlue.style.opacity = '1';
+
+        // Pink deep rhythmic breathing & body sway
+        const pBreatheY = Math.sin(t * 1.6) * 3.5;
+        const pScaleY = 1 + Math.sin(t * 1.6) * 0.015;
+        const pScaleX = 1 - Math.sin(t * 1.6) * 0.008;
+        const pSway = Math.sin(t * 0.8) * 0.4;
+        vPink.style.transform = `translateY(${pBreatheY.toFixed(2)}px) scale(${pScaleX.toFixed(3)}, ${pScaleY.toFixed(3)}) rotate(${pSway.toFixed(2)}deg)`;
+
+        // Red gentle vertical bobbing & snout rotation
+        const rBobY = Math.sin(t * 2.2) * 4.8;
+        const rVelY = Math.cos(t * 2.2) * 4.8;
+        const rSquash = Math.max(-0.035, Math.min(0.035, rVelY * 0.004));
+        const rTiltRot = Math.sin(t * 1.1 + 0.5) * 1.4;
+        if (t < 18.0 || t >= 25.0) {
+          redHead.style.transform = `translate(230px, ${(240 + rBobY).toFixed(2)}px) rotate(${rTiltRot.toFixed(2)}deg) scale(${(1 - rSquash).toFixed(3)}, ${(1 + rSquash).toFixed(3)})`;
+        }
+
+        // Teal fluffy vertical bounce & subtle side-to-side movement
+        const teBounceY = Math.sin(t * 3.2) * 5.2;
+        const teVelY = Math.cos(t * 3.2) * 5.2;
+        const teSquash = Math.max(-0.045, Math.min(0.045, teVelY * 0.005));
+        const teSwayX = Math.sin(t * 1.6) * 3.5;
+        tealBody.style.transform = `translate(${(195 + teSwayX).toFixed(2)}px, ${(435 + teBounceY).toFixed(2)}px) scale(${(1 - teSquash).toFixed(3)}, ${(1 + teSquash).toFixed(3)})`;
+
+        // Blue character: slightly larger, cute reactions
+        let blueReactionBounce = 0;
+        if (t >= 18.0 && t < 25.0) {
+          // Blue performs stronger bounce/reaction during password entry
+          blueReactionBounce = Math.sin(t * 5.5) * 6.0;
+        }
+        const bBobY = Math.sin(t * 2.6) * 5.8 + blueReactionBounce;
+        const bVelY = Math.cos(t * 2.6) * 5.8;
+        const bSquash = Math.max(-0.05, Math.min(0.05, bVelY * 0.006));
+        blueBody.style.transform = `translate(365px, ${(465 + bBobY).toFixed(2)}px) scale(${(1 - bSquash).toFixed(3)}, ${(1 + bSquash).toFixed(3)})`;
+      }
+
+      // Element coordinate anchors
+      const emailFieldPos = { x: 740, y: 395 };
+      const pwdFieldPos = { x: 740, y: 465 };
+      const btnLoginPos = { x: 790, y: 575 };
+
+      // ----------------------------------------------------------------------
+      // PHASE 3 (8–13s): Characters idle, eyes blink and look toward login form
+      // ----------------------------------------------------------------------
+      if (t >= 8.0 && t < 13.0) {
+        vCursor.style.opacity = '0';
+        vBoxEmail.classList.remove('focused');
+        vCaretEmail.classList.remove('blinking');
+        vTxtEmail.textContent = '';
+        vTxtPwd.textContent = '';
+        vBoxPwd.classList.remove('focused');
+        vCaretPwd.classList.remove('blinking');
+
+        // Eyes calmly look toward the login form
+        setEyeOffset(6, 3);
+      }
+
+      // ----------------------------------------------------------------------
+      // PHASE 4 (13–18s): Cursor enters email field, clicks & types email
+      // ----------------------------------------------------------------------
+      const emailString = "show.meem@gmail.com";
+      if (t >= 13.0 && t < 18.0) {
+        vCursor.style.opacity = '1';
+        vBoxEmail.classList.add('focused');
+        vCaretEmail.classList.add('blinking');
+
+        if (t < 14.2) {
+          // Cursor enters and moves to email
+          const moveProgress = easeInOutQuad((t - 13.0) / 1.2);
+          const curX = lerp(1120, emailFieldPos.x, moveProgress);
+          const curY = lerp(780, emailFieldPos.y, moveProgress);
+          vCursor.style.transform = `translate(${curX}px, ${curY}px)`;
+          vTxtEmail.textContent = '';
+        } else {
+          // Type email character by character (14.2s - 18.0s)
+          const typeProgress = Math.min((t - 14.2) / 3.6, 1);
+          const charCount = Math.floor(typeProgress * emailString.length);
+          vTxtEmail.textContent = emailString.substring(0, charCount);
+
+          // Cursor follows typing caret
+          vCursor.style.transform = `translate(${emailFieldPos.x + charCount * 7.5}px, ${emailFieldPos.y}px)`;
+
+          // Characters follow cursor with eyes & make tiny reactions
+          const eyeOffset = typeProgress * 8;
+          setEyeOffset(eyeOffset + 4, 5);
+        }
+      } else if (t >= 18.0) {
+        vTxtEmail.textContent = emailString;
+      }
+
+      // ----------------------------------------------------------------------
+      // PHASE 5 (18–25s): Cursor moves to password field, clicks & types password
+      // (Masked dots, Blue performs stronger bounce, privacy reactions)
+      // ----------------------------------------------------------------------
+      if (t >= 18.0 && t < 25.0) {
+        vBoxEmail.classList.remove('focused');
+        vCaretEmail.classList.remove('blinking');
+        vBoxPwd.classList.add('focused');
+        vCaretPwd.classList.add('blinking');
+
+        if (t < 19.4) {
+          // Cursor moves to password field
+          const moveProgress = easeInOutQuad((t - 18.0) / 1.4);
+          const curX = lerp(emailFieldPos.x + 130, pwdFieldPos.x, moveProgress);
+          const curY = lerp(emailFieldPos.y, pwdFieldPos.y, moveProgress);
+          vCursor.style.transform = `translate(${curX}px, ${curY}px)`;
+          vTxtPwd.textContent = '';
+        } else {
+          // Type masked password (19.4s - 24.5s)
+          const pwdProgress = Math.min((t - 19.4) / 4.8, 1);
+          const pwdLen = Math.floor(pwdProgress * 8);
+          vTxtPwd.textContent = '•'.repeat(pwdLen);
+          vCursor.style.transform = `translate(${pwdFieldPos.x + pwdLen * 10}px, ${pwdFieldPos.y}px)`;
+        }
+
+        // Reactions: Blue covers eyes with cute hands & bounces, Teal blushes, Red looks up
+        blueHands.style.opacity = '1';
+        blueLeftClosed.style.opacity = '1';
+        blueRightClosed.style.opacity = '1';
+        blueLeftPupil.style.opacity = '0';
+        blueRightPupil.style.opacity = '0';
+
+        tealLeftWink.style.opacity = '1';
+        tealRightWink.style.opacity = '1';
+        tealLeftPupil.style.opacity = '0';
+        tealRightPupil.style.opacity = '0';
+        tealBlushL.style.opacity = '0.9';
+        tealBlushR.style.opacity = '0.9';
+
+        redHead.style.transform = 'translate(230px, 210px) rotate(-30deg)';
+
+        pinkHand.style.opacity = '1';
+        pinkClosed.style.opacity = '1';
+        pinkPupil.style.opacity = '0';
+      }
+
+      // ----------------------------------------------------------------------
+      // PHASE 6 (25–30s): Password finishes, characters settle into synchronized
+      // idle animation, eyes briefly look toward the login button
+      // ----------------------------------------------------------------------
+      if (t >= 25.0) {
+        vTxtPwd.textContent = '••••••••';
+        vBoxPwd.classList.remove('focused');
+        vCaretPwd.classList.remove('blinking');
+
+        // Reset Privacy Mode to normal open eyes
+        blueHands.style.opacity = '0';
+        blueLeftClosed.style.opacity = '0';
+        blueRightClosed.style.opacity = '0';
+        blueLeftPupil.style.opacity = '1';
+        blueRightPupil.style.opacity = '1';
+
+        tealLeftWink.style.opacity = '0';
+        tealRightWink.style.opacity = '0';
+        tealLeftPupil.style.opacity = '1';
+        tealRightPupil.style.opacity = '1';
+        tealBlushL.style.opacity = '0';
+        tealBlushR.style.opacity = '0';
+
+        pinkHand.style.opacity = '0';
+        pinkClosed.style.opacity = '0';
+        pinkPupil.style.opacity = '1';
+
+        if (t < 30.0) {
+          // Synchronized idle animation & eyes look toward login button
+          setEyeOffset(7, 7);
+          vCursor.style.transform = `translate(${pwdFieldPos.x + 80}px, ${pwdFieldPos.y}px)`;
+        }
+      }
+
+      // ----------------------------------------------------------------------
+      // PHASE 7 (30–35s): Cursor moves toward black "Log in" button & subtle hover
+      // ----------------------------------------------------------------------
+      if (t >= 30.0 && t < 35.0) {
+        const moveProgress = easeInOutQuad(Math.min((t - 30.0) / 2.8, 1));
+        const curX = lerp(pwdFieldPos.x + 80, btnLoginPos.x, moveProgress);
+        const curY = lerp(pwdFieldPos.y, btnLoginPos.y, moveProgress);
+        vCursor.style.transform = `translate(${curX}px, ${curY}px)`;
+
+        // Eyes firmly focus on the login button
+        setEyeOffset(9, 8);
+
+        if (t >= 32.8) {
+          vBtnLogin.classList.add('hovered');
+        } else {
+          vBtnLogin.classList.remove('hovered');
+        }
+      }
+
+      // ----------------------------------------------------------------------
+      // PHASE 8 (35–38s): Hold final composition, gentle idle movement & blinks,
+      // UI remains sharp, clean and stable
+      // ----------------------------------------------------------------------
+      if (t >= 35.0) {
+        vCursor.style.transform = `translate(${btnLoginPos.x}px, ${btnLoginPos.y}px)`;
+        vBtnLogin.classList.add('hovered');
+        setEyeOffset(10, 8);
+      }
+
+      // Update Phase text
+      updatePhaseLabel(t);
+    }
+
+    function setEyeOffset(x, y) {
+      if (pinkPupil) pinkPupil.setAttribute('transform', `translate(${x * 1.1}, ${y * 1.1})`);
+      if (redLeftPupil) redLeftPupil.setAttribute('transform', `translate(${x * 0.7}, ${y * 0.7})`);
+      if (redRightPupil) redRightPupil.setAttribute('transform', `translate(${x * 0.7}, ${y * 0.7})`);
+      if (tealLeftPupil) tealLeftPupil.setAttribute('transform', `translate(${x * 0.6}, ${y * 0.6})`);
+      if (tealRightPupil) tealRightPupil.setAttribute('transform', `translate(${x * 0.6}, ${y * 0.6})`);
+      if (blueLeftPupil) blueLeftPupil.setAttribute('transform', `translate(${x * 0.75}, ${y * 0.75})`);
+      if (blueRightPupil) blueRightPupil.setAttribute('transform', `translate(${x * 0.75}, ${y * 0.75})`);
+    }
+
+    function updatePhaseLabel(t) {
+      let label = "";
+      if (t < 3.0) label = "0–3s: Fade & scale login card smoothly into view (upward ease-out)";
+      else if (t < 8.0) label = "3–8s: Reveal colorful cartoon characters from left with bounce & squash-stretch";
+      else if (t < 13.0) label = "8–13s: Characters subtle idle movements, blinking & looking toward login form";
+      else if (t < 18.0) label = "13–18s: Cursor enters email field, clicks & types address (eye tracking & reactions)";
+      else if (t < 25.0) label = "18–25s: Cursor clicks & types password as masked dots (Blue bounce & privacy)";
+      else if (t < 30.0) label = "25–30s: Password finishes, synchronized idle animation, eyes look at login button";
+      else if (t < 35.0) label = "30–35s: Cursor moves to black 'Log in' button with subtle hover effect";
+      else label = "35–38s: Hold final composition with gentle idle movement, sharp & stable UI";
+
+      phaseIndicator.textContent = label;
+      
+      const mm = String(Math.floor(t / 60)).padStart(2, '0');
+      const ss = String(Math.floor(t % 60)).padStart(2, '0');
+      timeDisplay.textContent = `${mm}:${ss} / 00:38`;
+      timelineProgress.style.width = `${(t / DURATION) * 100}%`;
+    }
+
+    // Animation Loop
+    function tick(timestamp) {
+      if (!lastTimestamp) lastTimestamp = timestamp;
+      const delta = (timestamp - lastTimestamp) / 1000;
+      lastTimestamp = timestamp;
+
+      if (isPlaying) {
+        currentTime += delta;
+        if (currentTime >= DURATION) {
+          currentTime = DURATION;
+          pause();
+        }
+        renderAtTime(currentTime);
+      }
+
+      animationFrameId = requestAnimationFrame(tick);
+    }
+
+    function play() {
+      if (currentTime >= DURATION) currentTime = 0;
+      isPlaying = true;
+      lastTimestamp = null;
+      playIcon.textContent = "❚❚";
+      playText.textContent = "Pause";
+    }
+
+    function pause() {
+      isPlaying = false;
+      playIcon.textContent = "▶";
+      playText.textContent = "Play Video";
+    }
+
+    btnPlayPause.addEventListener('click', () => {
+      if (isPlaying) pause();
+      else play();
+    });
+
+    // Scrubber click
+    timelineTrack.addEventListener('click', (e) => {
+      const rect = timelineTrack.getBoundingClientRect();
+      const clickRatio = Math.max(0, Math.min(1, (e.clientX - rect.left) / rect.width));
+      currentTime = clickRatio * DURATION;
+      renderAtTime(currentTime);
+    });
+
+    // Auto-start playback
+    setTimeout(() => {
+      play();
+    }, 400);
+
+    requestAnimationFrame(tick);
+
+    // Video Recording & Export with MediaRecorder
+    btnExport.addEventListener('click', async () => {
+      btnExport.textContent = "🔴 Recording 38s Video...";
+      btnExport.disabled = true;
+      currentTime = 0;
+      play();
+      alert("Recording started! The animation will play for 38 seconds and prompt you to save the high-resolution video file once complete.");
+    });
+  </script>
+</body>
+</html>
