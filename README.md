@@ -102,14 +102,6 @@
 
 ---
 
-## 🚀 Getting Started
-
-### 1. Database Setup
-Ensure MySQL is running on port 3306 with credentials `root` / `2006`:
-```sql
-CREATE DATABASE IF NOT EXISTS nexdemy_db CHARACTER SET utf8mb4;
-```
-
 ### 2. Start the Application Server
 ```bash
 python run.py
