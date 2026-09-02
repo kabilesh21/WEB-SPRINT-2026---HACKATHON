@@ -1,3 +1,67 @@
+
+/**
+ * ============================================================================
+ * SECTION B: REST API CONTRACT SPECIFICATIONS & PAYLOAD SCHEMAS
+ * ----------------------------------------------------------------------------
+ * 1. POST /api/login:
+ *    Payload: { identifier: string (12-digit roll_no or faculty_id), password: string, role: 'student'|'faculty' }
+ *    Response: { success: boolean, user: UserObject, message: string }
+ * 
+ * 2. POST /api/register:
+ *    Payload: { name: string, roll_no: string (12 digits), dept: string, email: string, mobile: string, password: string, role: 'student' }
+ *    Response: { success: boolean, user: UserObject, message: string }
+ * 
+ * 3. POST /api/forgot-password/request-otp:
+ *    Payload: { identifier: string, email: string }
+ *    Response: { success: boolean, identifier: string, email: string, message: string }
+ * 
+ * 4. POST /api/forgot-password/verify-reset:
+ *    Payload: { identifier: string, otp: string (6 digits), new_password: string (min 6 chars) }
+ *    Response: { success: boolean, message: string }
+ * 
+ * 5. POST /api/faculty/update-student:
+ *    Payload: { roll_no: string, courses: CourseArray, fee_status: 'Paid'|'Pending', cgpa: number, attendance_pct: number }
+ *    Response: { success: boolean, message: string }
+ * 
+ * 6. POST /api/faculty/add-student:
+ *    Payload: { name: string, roll_no: string, dept: string, email: string, mobile: string, fee_status: string, attendance_pct: number, cgpa: number }
+ *    Response: { success: boolean, student: StudentObject, message: string }
+ * ============================================================================
+ * 
+ * ============================================================================
+ * SECTION C: CANVAS 2D PHYSICS ENGINE & PUPIL TRACKING EQUATIONS
+ * ----------------------------------------------------------------------------
+ *  - Damped Harmonic Oscillator: F = -k * x - c * v
+ *  - Pupil Eye Offset Calculation: dx = mouseX - eyeCenterX, dy = mouseY - eyeCenterY
+ *  - Clamping Function: dist = sqrt(dx^2 + dy^2), angle = atan2(dy, dx)
+ *  - Target Offset: offsetX = min(maxRadius, dist * 0.15) * cos(angle)
+ *  - Target Offset Y: offsetY = min(maxRadius, dist * 0.15) * sin(angle)
+ * ============================================================================
+ */
+
+/**
+ * ============================================================================
+ * SECTION A: MATHEMATICAL FORMULAS & COMPUTATIONAL SPECIFICATIONS
+ * ----------------------------------------------------------------------------
+ * 1. Weighted Cumulative Grade Point Average (CGPA):
+ *    CGPA = (Sum of [Course_Credits_i * Grade_Point_i]) / (Total_Enrolled_Credits)
+ *    where Grade Points: O = 10.0, A+ = 9.0, A = 8.0, B+ = 7.0, B = 6.0
+ * 
+ * 2. Regulatory Attendance Compliance Ratio:
+ *    Attendance_Percentage = (Total_Periods_Attended / Total_Periods_Conducted) * 100
+ *    Threshold Condition: Attendance_Percentage >= 75.0% (Eligible for Examinations)
+ *    Safety_Margin = Total_Periods_Attended - ceil(Total_Periods_Conducted * 0.75)
+ * 
+ * 3. Class-Wide Aggregate Formulation (Faculty View):
+ *    Class_Average_CGPA = (Sum of Student_CGPA_j) / Total_Enrolled_Students
+ *    Class_Average_Attendance = (Sum of Student_Attendance_j) / Total_Enrolled_Students
+ *    Class_Total_Fee_Assessment = Total_Enrolled_Students * Semester_Base_Tuition_Fee
+ *    Class_Fee_Collection_Ratio = (Paid_Students_Count / Total_Enrolled_Students) * 100
+ * 
+ * 4. Electronic Fee Receipt Cryptographic Audit Hashing:
+ *    Receipt_Verification_Hash = SHA256(Transaction_ID + Student_Roll_No + Amount + Salt)
+ * ============================================================================
+ */
 /**
  * ============================================================================
  * NEXDEMY ENTERPRISE ACADEMIC TELEMETRY & STUDENT INFORMATION SYSTEM (SIS)
