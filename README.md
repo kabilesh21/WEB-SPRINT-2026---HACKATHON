@@ -1,4 +1,4 @@
-# Web Sprint 2026 — Animated Login UI with Smart Academic & Student Information System (SIS) Portal
+# Web Sprint 2026 — 🎨Animated Login UI with Smart Academic & Student Information System (SIS) Portal
 
 > **Web Sprint 2026 — Hackathon of the 3 hour hackathon participated and selected for 2nd round, in V.S.B Engineering College, Karur.**
 
