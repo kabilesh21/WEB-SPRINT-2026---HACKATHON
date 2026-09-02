@@ -4,7 +4,8 @@
 
 ---
 
-# Nexdemy — Smart Academic & Student Information System (SIS) Portal
+# Nexdemy — Animated Login UI
+# Smart Academic & Student Information System (SIS) Portal
 
 **Nexdemy** is an enterprise-grade, full-stack Academic Student Information System (SIS) and Institutional Management Portal built with modern vanilla web technologies, Python backend services, and MySQL persistence. It features custom 60 FPS interactive monster character animations, strict role-based access control (Student vs Faculty), live Gmail SMTP OTP password reset, real-time attendance compliance telemetry, What-If CGPA simulations, single-page vector PDF fee receipts, and faculty evaluation management.
 
