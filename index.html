@@ -623,7 +623,7 @@
                   </svg>
                 </div>
                 <div class="stat-content">
-                  <span class="stat-label">Cumulative GPA (CGPA)</span>
+                  <span class="stat-label" id="dash-cgpa-label">Cumulative GPA (CGPA)</span>
                   <h3 class="stat-number"><span id="dash-cgpa-val">9.12</span> <span style="font-size: 0.95rem; color: #64748b;">/ 10.0</span></h3>
                   <span class="stat-trend positive" id="dash-grade-trend">Grade: O (Outstanding)</span>
                 </div>
@@ -637,7 +637,7 @@
                   </svg>
                 </div>
                 <div class="stat-content">
-                  <span class="stat-label">Overall Attendance</span>
+                  <span class="stat-label" id="dash-attend-label">Overall Attendance</span>
                   <h3 class="stat-number"><span id="dash-attend-val">88.9%</span></h3>
                   <span class="stat-trend positive" id="dash-attend-status">Eligible for Examinations ✓</span>
                 </div>
@@ -651,9 +651,9 @@
                   </svg>
                 </div>
                 <div class="stat-content">
-                  <span class="stat-label">Total Enrolled Credits</span>
-                  <h3 class="stat-number">19 <span style="font-size: 0.95rem; color: #64748b;">Credits</span></h3>
-                  <span class="stat-trend neutral">6 Core Courses Registered</span>
+                  <span class="stat-label" id="dash-credits-label">Total Enrolled Credits</span>
+                  <h3 class="stat-number" id="dash-credits-val">19 <span style="font-size: 0.95rem; color: #64748b;">Credits</span></h3>
+                  <span class="stat-trend neutral" id="dash-credits-trend">6 Core Courses Registered</span>
                 </div>
               </div>
 
@@ -664,9 +664,9 @@
                   </svg>
                 </div>
                 <div class="stat-content">
-                  <span class="stat-label">Semester Fee Status</span>
-                  <h3 class="stat-number">₹ 58,200</h3>
-                  <span class="stat-trend positive">All Dues Cleared (₹ 0.00) ✓</span>
+                  <span class="stat-label" id="dash-fees-label">Semester Fee Status</span>
+                  <h3 class="stat-number" id="dash-fees-val">₹ 58,200</h3>
+                  <span class="stat-trend positive" id="dash-fees-trend">All Dues Cleared (₹ 0.00) ✓</span>
                 </div>
               </div>
             </div>
@@ -678,8 +678,8 @@
               <div class="dash-card attendance-hero-card">
                 <div class="card-header-flex">
                   <div>
-                    <h3 class="card-heading">Attendance Telemetry</h3>
-                    <p class="card-subheading">Nexdemy minimum threshold compliance: 75.0%</p>
+                    <h3 class="card-heading" id="overview-attend-card-heading">Attendance Telemetry</h3>
+                    <p class="card-subheading" id="overview-attend-card-sub">Nexdemy minimum threshold compliance: 75.0%</p>
                   </div>
                   <button class="btn-text-action" onclick="switchDashboardTab('attendance')">View Breakdown →</button>
                 </div>
@@ -692,21 +692,21 @@
                     </svg>
                     <div class="gauge-center-content">
                       <span class="gauge-percent" id="overview-gauge-percent">88.9%</span>
-                      <span class="gauge-sub">Overall</span>
+                      <span class="gauge-sub" id="overview-gauge-sub">Overall</span>
                     </div>
                   </div>
 
                   <div class="gauge-stats-side">
                     <div class="telemetry-pill-box">
-                      <span class="pill-label">Total Conducted</span>
+                      <span class="pill-label" id="overview-total-classes-lbl">Total Conducted</span>
                       <strong class="pill-val" id="overview-total-classes">250 Periods</strong>
                     </div>
                     <div class="telemetry-pill-box">
-                      <span class="pill-label">Periods Attended</span>
+                      <span class="pill-label" id="overview-attended-classes-lbl">Periods Attended</span>
                       <strong class="pill-val text-cyan" id="overview-attended-classes">226 Periods</strong>
                     </div>
                     <div class="telemetry-pill-box highlight">
-                      <span class="pill-label">Safety Buffer Margin</span>
+                      <span class="pill-label" id="overview-margin-lbl">Safety Buffer Margin</span>
                       <strong class="pill-val text-green" id="overview-margin-text">+28 Periods Above 75%</strong>
                     </div>
                   </div>
@@ -717,8 +717,8 @@
               <div class="dash-card what-if-card">
                 <div class="card-header-flex">
                   <div>
-                    <h3 class="card-heading">Interactive What-If GPA Simulator</h3>
-                    <p class="card-subheading">Simulate potential end-semester letter grade scenarios</p>
+                    <h3 class="card-heading" id="overview-sim-heading">Interactive What-If GPA Simulator</h3>
+                    <p class="card-subheading" id="overview-sim-sub">Simulate potential end-semester letter grade scenarios</p>
                   </div>
                 </div>
 
@@ -731,7 +731,7 @@
 
                 <div class="sim-result-box">
                   <div class="sim-metric">
-                    <span class="sim-label">Projected CGPA:</span>
+                    <span class="sim-label" id="overview-sim-proj-label">Projected CGPA:</span>
                     <strong class="sim-val" id="projected-cgpa">9.12 / 10.0</strong>
                   </div>
                   <div class="sim-metric">
@@ -747,8 +747,8 @@
             <div class="dash-card" style="margin-top: 24px;">
               <div class="card-header-flex">
                 <div>
-                  <h3 class="card-heading">6-Subject Semester Curriculum Snapshot</h3>
-                  <p class="card-subheading">Current internal marks progress and attendance ratio</p>
+                  <h3 class="card-heading" id="overview-courses-heading">6-Subject Semester Curriculum Snapshot</h3>
+                  <p class="card-subheading" id="overview-courses-sub">Current internal marks progress and attendance ratio</p>
                 </div>
                 <button class="btn-text-action" onclick="switchDashboardTab('courses')">All Courses Details →</button>
               </div>

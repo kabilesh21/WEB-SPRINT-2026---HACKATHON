@@ -362,24 +362,67 @@ function updateDashboardUI() {
   const attData = calculateOverallAttendance();
   const cgpaData = calculateCGPA();
 
-  // Overview Tab Stat Numbers
+  const list = FacultyStore.students;
+  const total = list.length || 1;
+  const paidCount = list.filter(s => s.fee_status === 'Paid').length;
+  const pendingCount = total - paidCount;
+
+  // Overview Tab Stat Card 1: CGPA
+  const cgpaLblEl = document.getElementById('dash-cgpa-label');
+  if (cgpaLblEl) cgpaLblEl.textContent = isStaff ? 'Class Average CGPA (Enrolled Students)' : 'Cumulative GPA (CGPA)';
   const cgpaValEl = document.getElementById('dash-cgpa-val');
   if (cgpaValEl) cgpaValEl.textContent = cgpaData.cgpa.toFixed(2);
   const gradeTrendEl = document.getElementById('dash-grade-trend');
   if (gradeTrendEl) {
     gradeTrendEl.textContent = isStaff 
-      ? `Class Avg: Grade ${cgpaData.classification.letter} (${FacultyStore.students.length} Students)`
+      ? `Class Avg: Grade ${cgpaData.classification.letter} (${total} Students)`
       : cgpaData.classification.label;
   }
 
+  // Overview Tab Stat Card 2: Attendance
+  const attendLblEl = document.getElementById('dash-attend-label');
+  if (attendLblEl) attendLblEl.textContent = isStaff ? 'Class Average Attendance' : 'Overall Attendance';
   const attendValEl = document.getElementById('dash-attend-val');
   if (attendValEl) attendValEl.textContent = `${attData.percentage}%`;
   const attendStatusEl = document.getElementById('dash-attend-status');
   if (attendStatusEl) {
     attendStatusEl.textContent = isStaff 
-      ? `${attData.eligibleCount}/${FacultyStore.students.length} Students Eligible (≥75%)` 
+      ? `${attData.eligibleCount}/${total} Students Eligible (≥75%) ✓` 
       : attData.status;
     attendStatusEl.className = `stat-trend ${attData.isEligible ? 'positive' : 'negative'}`;
+  }
+
+  // Overview Tab Stat Card 3: Credits / Enrolled Students
+  const credLblEl = document.getElementById('dash-credits-label');
+  if (credLblEl) credLblEl.textContent = isStaff ? 'Total Enrolled Students' : 'Total Enrolled Credits';
+  const credValEl = document.getElementById('dash-credits-val');
+  if (credValEl) {
+    credValEl.innerHTML = isStaff 
+      ? `${total} <span style="font-size: 0.95rem; color: #64748b;">Students</span>` 
+      : `19 <span style="font-size: 0.95rem; color: #64748b;">Credits</span>`;
+  }
+  const credTrendEl = document.getElementById('dash-credits-trend');
+  if (credTrendEl) {
+    credTrendEl.textContent = isStaff 
+      ? 'B.E. Computer Science & Engineering' 
+      : '6 Core Courses Registered';
+  }
+
+  // Overview Tab Stat Card 4: Fee Status
+  const feeLblEl = document.getElementById('dash-fees-label');
+  if (feeLblEl) feeLblEl.textContent = isStaff ? 'Class Tuition Fee Collection' : 'Semester Fee Status';
+  const feeValEl = document.getElementById('dash-fees-val');
+  if (feeValEl) {
+    feeValEl.textContent = isStaff 
+      ? `₹ ${(paidCount * 58200).toLocaleString('en-IN')}` 
+      : '₹ 58,200';
+  }
+  const feeTrendEl = document.getElementById('dash-fees-trend');
+  if (feeTrendEl) {
+    feeTrendEl.textContent = isStaff 
+      ? `${paidCount}/${total} Paid (${Math.round((paidCount/total)*100)}%) • ${pendingCount} Due` 
+      : 'All Dues Cleared (₹ 0.00) ✓';
+    feeTrendEl.className = `stat-trend ${isStaff ? (pendingCount === 0 ? 'positive' : 'neutral') : 'positive'}`;
   }
 
   // Sidebar Badges
@@ -394,30 +437,64 @@ function updateDashboardUI() {
 
   const overviewGaugeRing = document.getElementById('overview-gauge-ring');
   const overviewGaugePercent = document.getElementById('overview-gauge-percent');
+  const overviewGaugeSub = document.getElementById('overview-gauge-sub');
   if (overviewGaugeRing) {
     overviewGaugeRing.style.strokeDashoffset = offset;
     overviewGaugeRing.style.stroke = attData.percentage >= 75.0 ? '#00d1d1' : (attData.percentage >= 65.0 ? '#f59e0b' : '#ef4444');
   }
   if (overviewGaugePercent) overviewGaugePercent.textContent = `${attData.percentage}%`;
+  if (overviewGaugeSub) overviewGaugeSub.textContent = isStaff ? 'Class Avg' : 'Overall';
 
+  const overviewAttHeading = document.getElementById('overview-attend-card-heading');
+  if (overviewAttHeading) overviewAttHeading.textContent = isStaff ? 'Class Attendance Telemetry (Enrolled Students Average)' : 'Attendance Telemetry';
+  const overviewAttSub = document.getElementById('overview-attend-card-sub');
+  if (overviewAttSub) overviewAttSub.textContent = isStaff ? `Nexdemy minimum threshold compliance: 75.0% across ${total} enrolled students` : 'Nexdemy minimum threshold compliance: 75.0%';
+
+  const totalClassesLbl = document.getElementById('overview-total-classes-lbl');
+  if (totalClassesLbl) totalClassesLbl.textContent = isStaff ? 'Total Enrolled' : 'Total Conducted';
   const totalClassesEl = document.getElementById('overview-total-classes');
   if (totalClassesEl) {
     totalClassesEl.textContent = isStaff 
-      ? `${FacultyStore.students.length} Enrolled Students` 
+      ? `${total} Students` 
       : `${attData.totalConducted} Periods`;
   }
+
+  const attendedClassesLbl = document.getElementById('overview-attended-classes-lbl');
+  if (attendedClassesLbl) attendedClassesLbl.textContent = isStaff ? 'Class Avg Attendance' : 'Periods Attended';
   const attendedClassesEl = document.getElementById('overview-attended-classes');
   if (attendedClassesEl) {
     attendedClassesEl.textContent = isStaff 
-      ? `Class Avg: ${attData.percentage}%` 
+      ? `${attData.percentage}%` 
       : `${attData.totalAttended} Periods`;
   }
+
+  const marginLbl = document.getElementById('overview-margin-lbl');
+  if (marginLbl) marginLbl.textContent = isStaff ? 'Threshold Compliance' : 'Safety Buffer Margin';
   const marginTextEl = document.getElementById('overview-margin-text');
   if (marginTextEl) {
     marginTextEl.textContent = isStaff 
       ? `${attData.eligibleCount} Eligible • ${attData.shortageCount} Shortage (<75%)` 
       : (attData.safetyMargin >= 0 ? `+${attData.safetyMargin} Periods Above 75%` : `${attData.safetyMargin} Periods Below 75%`);
   }
+
+  const simHeading = document.getElementById('overview-sim-heading');
+  if (simHeading) simHeading.textContent = isStaff ? 'Class GPA & Academic Analytics' : 'Interactive What-If GPA Simulator';
+  const simSub = document.getElementById('overview-sim-sub');
+  if (simSub) simSub.textContent = isStaff ? `Enrolled class performance matrix & average projections (${total} students)` : 'Simulate potential end-semester letter grade scenarios';
+  const simProjLbl = document.getElementById('overview-sim-proj-label');
+  if (simProjLbl) simProjLbl.textContent = isStaff ? 'Class Avg CGPA:' : 'Projected CGPA:';
+  const projCgpaEl = document.getElementById('projected-cgpa');
+  if (projCgpaEl && isStaff) projCgpaEl.textContent = `${cgpaData.cgpa.toFixed(2)} / 10.0`;
+  const projTag = document.getElementById('projected-grade-tag');
+  if (projTag && isStaff) {
+    projTag.textContent = `Grade: ${cgpaData.classification.letter} (Class Average)`;
+    projTag.className = `grade-pill-tag ${cgpaData.classification.class}`;
+  }
+
+  const overviewCoursesHeading = document.getElementById('overview-courses-heading');
+  if (overviewCoursesHeading) overviewCoursesHeading.textContent = isStaff ? '6-Subject Semester Curriculum — Class Averages' : '6-Subject Semester Curriculum Snapshot';
+  const overviewCoursesSub = document.getElementById('overview-courses-sub');
+  if (overviewCoursesSub) overviewCoursesSub.textContent = isStaff ? `Class average internal marks & attendance across all ${total} enrolled students` : 'Current internal marks progress and attendance ratio';
 
   // Full Attendance Tab Gauge
   const fullGaugeRing = document.getElementById('full-gauge-ring');
