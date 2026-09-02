@@ -36,7 +36,26 @@ SMTP_PASS = 'wecwdxpwxsjoupgt'
 OTP_STORE = {}
 
 DEFAULT_20_STUDENTS = [
-    ('Aravind Kumar S', '711522104001', 'B.E. Computer Science and Engineering', 'student1@nexdemy.edu', '+91 9876543201', 'Paid', 95, 42, 45)
+    ('Aravind Kumar S', '711522104001', 'B.E. Computer Science and Engineering', 'student1@nexdemy.edu', '+91 9876543201', 'Paid', 95, 42, 45),
+    ('Abinaya R', '711522104002', 'B.E. Computer Science and Engineering', 'student2@nexdemy.edu', '+91 9876543202', 'Paid', 92, 41, 45),
+    ('Balaji M', '711522104003', 'B.E. Computer Science and Engineering', 'student3@nexdemy.edu', '+91 9876543203', 'Pending', 78, 34, 45),
+    ('Chandru K', '711522104004', 'B.E. Computer Science and Engineering', 'student4@nexdemy.edu', '+91 9876543204', 'Paid', 84, 38, 45),
+    ('Deepika S', '711522104005', 'B.E. Computer Science and Engineering', 'student5@nexdemy.edu', '+91 9876543205', 'Paid', 94, 43, 45),
+    ('Dinesh Kumar V', '711522104006', 'B.E. Computer Science and Engineering', 'student6@nexdemy.edu', '+91 9876543206', 'Pending', 69, 30, 45),
+    ('Gayathri N', '711522104007', 'B.E. Computer Science and Engineering', 'student7@nexdemy.edu', '+91 9876543207', 'Paid', 88, 39, 45),
+    ('Hariharan P', '711522104008', 'B.E. Computer Science and Engineering', 'student8@nexdemy.edu', '+91 9876543208', 'Paid', 82, 36, 45),
+    ('Harini T', '711522104009', 'B.E. Computer Science and Engineering', 'student9@nexdemy.edu', '+91 9876543209', 'Paid', 96, 44, 45),
+    ('Jeeva R', '711522104010', 'B.E. Computer Science and Engineering', 'student10@nexdemy.edu', '+91 9876543210', 'Pending', 71, 32, 45),
+    ('Karthick Raja M', '711522104011', 'B.E. Computer Science and Engineering', 'student11@nexdemy.edu', '+91 9876543211', 'Paid', 86, 38, 45),
+    ('Kavitha S', '711522104012', 'B.E. Computer Science and Engineering', 'student12@nexdemy.edu', '+91 9876543212', 'Paid', 93, 42, 45),
+    ('Manikandan G', '711522104013', 'B.E. Computer Science and Engineering', 'student13@nexdemy.edu', '+91 9876543213', 'Paid', 80, 35, 45),
+    ('Nandhini B', '711522104014', 'B.E. Computer Science and Engineering', 'student14@nexdemy.edu', '+91 9876543214', 'Paid', 90, 40, 45),
+    ('Naveen Kumar S', '711522104015', 'B.E. Computer Science and Engineering', 'student15@nexdemy.edu', '+91 9876543215', 'Pending', 68, 29, 45),
+    ('Pooja V', '711522104016', 'B.E. Computer Science and Engineering', 'student16@nexdemy.edu', '+91 9876543216', 'Paid', 89, 39, 45),
+    ('Praveen Raj D', '711522104017', 'B.E. Computer Science and Engineering', 'student17@nexdemy.edu', '+91 9876543217', 'Paid', 83, 37, 45),
+    ('Priya Dharshini R', '711522104018', 'B.E. Computer Science and Engineering', 'student18@nexdemy.edu', '+91 9876543218', 'Paid', 96, 44, 45),
+    ('Ragul K', '711522104019', 'B.E. Computer Science and Engineering', 'student19@nexdemy.edu', '+91 9876543219', 'Pending', 74, 33, 45),
+    ('Sneha M', '711522104020', 'B.E. Computer Science and Engineering', 'student20@nexdemy.edu', '+91 9876543220', 'Paid', 87, 39, 45)
 ]
 
 def hash_password(password):

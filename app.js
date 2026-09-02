@@ -202,7 +202,7 @@ const AcademicStore = {
 };
 
 // ==========================================================================
-// 2. FACULTY DATA STORE — DEFAULT STUDENT
+// 2. FACULTY DATA STORE — 20 DEFAULT STUDENTS WITH FEES, MARKS & CGPA
 // ==========================================================================
 const FacultyStore = {
   activeFilter: 'all', // 'all', 'paid', 'pending', 'shortage'
@@ -210,7 +210,26 @@ const FacultyStore = {
   selectedStudentRoll: null,
 
   students: [
-    { name: 'Aravind Kumar S', roll_no: '711522104001', dept: 'B.E. Computer Science and Engineering', email: 'student1@nexdemy.edu', fee_status: 'Paid', attendance_pct: 88.4, cgpa: 9.68 }
+    { name: 'Aravind Kumar S', roll_no: '711522104001', dept: 'B.E. Computer Science and Engineering', email: 'student1@nexdemy.edu', fee_status: 'Paid', attendance_pct: 88.4, cgpa: 9.68 },
+    { name: 'Abinaya R', roll_no: '711522104002', dept: 'B.E. Computer Science and Engineering', email: 'student2@nexdemy.edu', fee_status: 'Paid', attendance_pct: 91.2, cgpa: 9.15 },
+    { name: 'Balaji M', roll_no: '711522104003', dept: 'B.E. Computer Science and Engineering', email: 'student3@nexdemy.edu', fee_status: 'Pending', attendance_pct: 76.5, cgpa: 7.80 },
+    { name: 'Chandru K', roll_no: '711522104004', dept: 'B.E. Computer Science and Engineering', email: 'student4@nexdemy.edu', fee_status: 'Paid', attendance_pct: 84.0, cgpa: 8.45 },
+    { name: 'Deepika S', roll_no: '711522104005', dept: 'B.E. Computer Science and Engineering', email: 'student5@nexdemy.edu', fee_status: 'Paid', attendance_pct: 93.5, cgpa: 9.40 },
+    { name: 'Dinesh Kumar V', roll_no: '711522104006', dept: 'B.E. Computer Science and Engineering', email: 'student6@nexdemy.edu', fee_status: 'Pending', attendance_pct: 68.0, cgpa: 6.90 },
+    { name: 'Gayathri N', roll_no: '711522104007', dept: 'B.E. Computer Science and Engineering', email: 'student7@nexdemy.edu', fee_status: 'Paid', attendance_pct: 86.2, cgpa: 8.85 },
+    { name: 'Hariharan P', roll_no: '711522104008', dept: 'B.E. Computer Science and Engineering', email: 'student8@nexdemy.edu', fee_status: 'Paid', attendance_pct: 80.5, cgpa: 8.20 },
+    { name: 'Harini T', roll_no: '711522104009', dept: 'B.E. Computer Science and Engineering', email: 'student9@nexdemy.edu', fee_status: 'Paid', attendance_pct: 95.0, cgpa: 9.60 },
+    { name: 'Jeeva R', roll_no: '711522104010', dept: 'B.E. Computer Science and Engineering', email: 'student10@nexdemy.edu', fee_status: 'Pending', attendance_pct: 72.0, cgpa: 7.10 },
+    { name: 'Karthick Raja M', roll_no: '711522104011', dept: 'B.E. Computer Science and Engineering', email: 'student11@nexdemy.edu', fee_status: 'Paid', attendance_pct: 85.4, cgpa: 8.65 },
+    { name: 'Kavitha S', roll_no: '711522104012', dept: 'B.E. Computer Science and Engineering', email: 'student12@nexdemy.edu', fee_status: 'Paid', attendance_pct: 92.0, cgpa: 9.25 },
+    { name: 'Manikandan G', roll_no: '711522104013', dept: 'B.E. Computer Science and Engineering', email: 'student13@nexdemy.edu', fee_status: 'Paid', attendance_pct: 78.5, cgpa: 7.95 },
+    { name: 'Nandhini B', roll_no: '711522104014', dept: 'B.E. Computer Science and Engineering', email: 'student14@nexdemy.edu', fee_status: 'Paid', attendance_pct: 89.6, cgpa: 9.05 },
+    { name: 'Naveen Kumar S', roll_no: '711522104015', dept: 'B.E. Computer Science and Engineering', email: 'student15@nexdemy.edu', fee_status: 'Pending', attendance_pct: 64.5, cgpa: 6.75 },
+    { name: 'Pooja V', roll_no: '711522104016', dept: 'B.E. Computer Science and Engineering', email: 'student16@nexdemy.edu', fee_status: 'Paid', attendance_pct: 87.0, cgpa: 8.90 },
+    { name: 'Praveen Raj D', roll_no: '711522104017', dept: 'B.E. Computer Science and Engineering', email: 'student17@nexdemy.edu', fee_status: 'Paid', attendance_pct: 82.0, cgpa: 8.35 },
+    { name: 'Priya Dharshini R', roll_no: '711522104018', dept: 'B.E. Computer Science and Engineering', email: 'student18@nexdemy.edu', fee_status: 'Paid', attendance_pct: 96.0, cgpa: 9.60 },
+    { name: 'Ragul K', roll_no: '711522104019', dept: 'B.E. Computer Science and Engineering', email: 'student19@nexdemy.edu', fee_status: 'Pending', attendance_pct: 74.0, cgpa: 7.40 },
+    { name: 'Sneha M', roll_no: '711522104020', dept: 'B.E. Computer Science and Engineering', email: 'student20@nexdemy.edu', fee_status: 'Paid', attendance_pct: 86.8, cgpa: 8.70 }
   ]
 };
 
@@ -861,8 +880,8 @@ function viewStudentReceipt(rollNo, studentName, dept, txnId, amount) {
 
   printableArea.innerHTML = `
     <div class="receipt-institution-header">
-      <h2>NEXDEMY</h2>
-      <p>SMART ACADEMIC & STUDENT MANAGEMENT PORTAL | www.nexdemy.edu</p>
+      <h2>KS COLLEGE OF ENGINEERING, KARUR - 639001</h2>
+      <p>NEXDEMY — SMART ACADEMIC & STUDENT MANAGEMENT PORTAL | www.nexdemy.edu</p>
       <p style="font-size: 0.76rem; color: #64748b;">(Official Institutional Fee Ledger & Audit System)</p>
       <div class="receipt-title-banner">OFFICIAL ELECTRONIC FEE RECEIPT & TRANSACTION AUDIT</div>
     </div>
@@ -1730,8 +1749,8 @@ function viewReceipt(txnId, feeName, amount) {
 
   printableArea.innerHTML = `
     <div class="receipt-institution-header">
-      <h2>NEXDEMY</h2>
-      <p>SMART ACADEMIC & STUDENT MANAGEMENT PORTAL | www.nexdemy.edu</p>
+      <h2>KS COLLEGE OF ENGINEERING, KARUR - 639001</h2>
+      <p>NEXDEMY — SMART ACADEMIC & STUDENT MANAGEMENT PORTAL | www.nexdemy.edu</p>
       <p style="font-size: 0.76rem; color: #64748b;">(Official Institutional Fee Ledger & Audit System)</p>
       <div class="receipt-title-banner">OFFICIAL ELECTRONIC FEE RECEIPT & TRANSACTION AUDIT</div>
     </div>
@@ -1832,14 +1851,14 @@ function downloadCurrentReceiptPDF() {
     doc.rect(12, 12, pageWidth - 24, 270);
 
     doc.setFont('times', 'bold');
-    doc.setFontSize(16);
+    doc.setFontSize(14);
     doc.setTextColor(15, 23, 42);
-    doc.text('NEXDEMY', pageWidth / 2, 24, { align: 'center' });
+    doc.text('KS COLLEGE OF ENGINEERING, KARUR - 639001', pageWidth / 2, 24, { align: 'center' });
 
     doc.setFontSize(8.5);
     doc.setFont('helvetica', 'normal');
     doc.setTextColor(71, 85, 105);
-    doc.text('SMART ACADEMIC & STUDENT MANAGEMENT PORTAL | www.nexdemy.edu', pageWidth / 2, 30, { align: 'center' });
+    doc.text('NEXDEMY — SMART ACADEMIC & STUDENT MANAGEMENT PORTAL | www.nexdemy.edu', pageWidth / 2, 30, { align: 'center' });
 
     doc.setFillColor(15, 23, 42);
     doc.rect(pageWidth / 2 - 60, 35, 120, 7, 'F');
