@@ -1,11 +1,10 @@
-# Web Sprint 2026 — Hackathon
+# Web Sprint 2026 — Animated Login UI with Smart Academic & Student Information System (SIS) Portal
 
 > **Web Sprint 2026 — Hackathon of the 3 hour hackathon participated and selected for 2nd round, in V.S.B Engineering College, Karur.**
 
 ---
 
-# Nexdemy — Animated Login UI
-# Smart Academic & Student Information System (SIS) Portal
+# Nexdemy 
 
 **Nexdemy** is an enterprise-grade, full-stack Academic Student Information System (SIS) and Institutional Management Portal built with modern vanilla web technologies, Python backend services, and MySQL persistence. It features custom 60 FPS interactive monster character animations, strict role-based access control (Student vs Faculty), live Gmail SMTP OTP password reset, real-time attendance compliance telemetry, What-If CGPA simulations, single-page vector PDF fee receipts, and faculty evaluation management.
 
